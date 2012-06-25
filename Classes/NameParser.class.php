@@ -47,12 +47,10 @@
 //===========================================================
 // Class: NameParser
 // Usage: Default PHP Behaviour should be sufficient
-// Dependencies: none
+// Dependencies: StringFuncs.class.php
 //===========================================================
 class NameParser
 {
-    
-    
     //============================
     // Function: __construct
     // Usage: initializer
@@ -60,8 +58,7 @@ class NameParser
     //============================
     public function __construct()
     {
-        $aName = array();
-        
+        $aName = array(); // We'll have to save our elements somewhere ;-)
     }
 }
 
