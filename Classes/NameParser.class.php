@@ -117,6 +117,19 @@ class NameParser
             $this->aName['Episode'] = ""; // The order values can be left default.
         }
         
+        // Lets probe some method's to grep the series name
+        $sEpisode = $Methods->SXXEXX_Name($sInput);
+        if($iEpisode != -1)
+        {
+            $bGotName = true;
+            $sCutMethod="SXXEXX";
+            $this->aName['Name'] = $sEpisode;
+        }
+        else
+        {
+            $this->aName['Episode'] = ""; // The order values can be left default.
+        }
+        
         print "Using method: ".$sCutMethod;
         // Debug output
         if($debug == true)

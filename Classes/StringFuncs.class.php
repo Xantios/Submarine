@@ -70,6 +70,24 @@ class StringFuncs
         
     }
     
+    //=====================================
+    // Function: SXXEXX_Name
+    // Usage: <String(EpisodeName)>
+    // return: string (Empty on error)
+    //======================================
+    public function SXXEXX_Name($sInput)
+    {
+        // Get the first part of the name
+        $aSerieName = explode("S",$sInput,2);
+        $sName = $aSerieName[0];
+        // do some replacemants.
+        $sName = str_replace("-"," ",$sName);
+        $sName = str_replace("_"," ",$sName);
+        $sName = str_replace(","," ",$sName);
+        $sName = str_replace("."," ",$sName);
+        print $sName;
+        return $sName;
+    }
     
     //=====================================
     // Function: SXXEXX_Season
