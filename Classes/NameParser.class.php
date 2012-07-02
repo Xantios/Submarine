@@ -81,61 +81,48 @@ class NameParser
         // The.Big.Bang.Theory.S04E24.WEB-DL.720p.DD5.1.H.ext
         // TV Episode - S01E01.ext
         
+        //Dependency's
+        require "StringFuncs.class.php";
+        $Methods = new StringFuncs();
+        
         // Set some var's
         $sCutMethod = "None"; $iSeason = 0; $iEpisode = 0;
+        // Create some flag's
+        $bGotSeason = false; $bGotEpisode = false; $bGotSerie = false; $bGotRelease = false;
+        $debug = true;
         
-        /////////////////////////////////////////////////////////////////////////////////
-        // Cut method one: SXXEXX////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////
-        // The most common way I receive my series are in a name format                //
-        // using something like SerieName.S01E01.720p.BluRay.X264-RELEASEGROUP         //   
-        // So lets try to parse that name to a array! :-D                              //
-        /////////////////////////////////////////////////////////////////////////////////
-            
-        $aSerieName = explode(".S",$sInput,2);        
-        // Check if that went well
-        if(count($aSerieName)-1 != 2)
+        // Lets probe some method's to grep the season part
+        $iSeason = $Methods->SXXEXX_Season($sInput);
+        if($iSeason != -1)
         {
-            $iSeason = substr($aSerieName[1],0,2); // Get the first 2 digit's for example S02 becomes 02
-            
-            // If using 1 digit for the season naming we have to remap the episode var
-            // ( Check the seconds char for being an E, by checking if it's a int
-            // Dont check for a number, cause they can change (02 versus 12)
-            if(!is_int(substr($iSeason,1,2)))
-            {
-                $iSeason = substr($aSerieName[1],0,1);     
-            }
-            
-            // finaly (for the season var) drop the first 0 if season is <10
-            $sNullCheck = substr($iSeason,0,1);
-            if($sNullCheck == 0) { $iSeason = $sNullCheck; }
-            
-            // Now try to get the episode number
-                        
-            // Put all items together
-            $aSerieName['Season'] = $iSeason;
+            $bGotSeason = true;
+            $sCutMethod="SXXEXX";
+            $this->aName['Season'] = $iSeason;
         }
-        else // Maybe a hyphen or a underscore ( - or _ ) is used for the splitting
+        else
         {
-            $aSerieName = explode("_S",$sInput,2);
-            if(count($aSerieName)-1 != 2)
-            {
-                // JMP
-            }
-            
-            $aSerieName = explode("-S",$sInput,2);
-            if(count($aSerieName)-1 != 2)
-            {
-                // JMP
-            }
-            
+            $this->aName['Season'] = ""; // The order values can be left default.
         }
         
+        // Lets probe some method's to grep the Episode part
+        $iEpisode = $Methods->SXXEXX_Episode($sInput);
+        if($iEpisode != -1)
+        {
+            $bGotSeason = true;
+            $sCutMethod="SXXEXX";
+            $this->aName['Episode'] = $iEpisode;
+        }
+        else
+        {
+            $this->aName['Episode'] = ""; // The order values can be left default.
+        }
         
         print "Using method: ".$sCutMethod;
-        
-        $this->DebugOutput($aSerieName);
+        // Debug output
+        if($debug == true)
+        {
+            $this->DebugOutput($this->aName);
+        }
     }
     
     public function DebugOutput($aInput)

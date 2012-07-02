@@ -69,6 +69,76 @@ class StringFuncs
     {
         
     }
+    
+    
+    //=====================================
+    // Function: SXXEXX_Season
+    // Usage: <String(EpisodeName)>
+    // return: int >0 or -1 on error.
+    //======================================
+    public function SXXEXX_Season($sInput)
+    {
+        /////////////////////////////////////////////////////////////////////////////////
+        // Cut method one: SXXEXX////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////
+        // The most common way I receive my series are in a name format                //
+        // using something like SerieName.S01E01.720p.BluRay.X264-RELEASEGROUP         //   
+        // So lets try to parse that name to a array! :-D                              //
+        /////////////////////////////////////////////////////////////////////////////////
+        $aSerieName = explode("S",$sInput,2);
+        
+        // Check if that went well
+        if(count($aSerieName)-1 != 2)
+        {
+            // Get the first 2 digit's for example S02 becomes 02
+            $iSeason = substr($aSerieName[1],0,2);
+            
+            // Lets check and fix the E bug when
+            // S1E1 method is used.
+            if(substr($iSeason,1,1)=="E")
+            { $iSeason=substr($iSeason,0,strlen($iSeason)-1); } // chop of the last char ( The E ) 
+            
+            // We can't check for pre-nulled names by checking if <10 because it should be a int,
+            // but we cant typecast in PHP :-(
+            if(substr($iSeason,0,1)=="0")
+            {
+                $iSeason=substr($iSeason,1,strlen($iSeason));
+            }
+            
+            // Lets return as a int.
+            return $iSeason;                        
+        }
+        else return -1;
+    }
+    
+    //=====================================
+    // Function: SXXEXX_Episode
+    // Usage: <String(EpisodeName)>
+    // return: int >0 or -1 on error.
+    //======================================
+    public function SXXEXX_Episode($sInput)
+    {
+        // Lets split! 
+        $aSerieName = explode("E",$sInput,2);
+        
+        // Check if that went well
+        if(count($aSerieName)-1 != 2)
+        {
+            // Get the first 2 digit's for example E02 becomes 02
+            $iEpisode = substr($aSerieName[1],0,2);
+            
+            // Lets try if we can assume a int here.
+            // so we can rip of the prefixed 0.
+            if($iEpisode<10)
+            {
+                $iEpisode=substr($iEpisode,1,strlen($iEpisode));
+            }
+            return $iEpisode;
+        }
+        else return -1;
+        
+    }
 }
 
 
