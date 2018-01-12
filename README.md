@@ -1,3 +1,5 @@
+Jan 2018: Setting this readonly. maybe someone has a use for it :)
+
 Submarine
 =========
 
